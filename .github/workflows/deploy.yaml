@@ -1,0 +1,20 @@
+name: App build
+on: workflow_dispatch
+
+jobs:
+  build_with_signing:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install the Apple certificate and provisioning profile
+        env:
+          APP_SIGNING_IDENTITY: ${{ secrets.APP_SIGNING_IDENTITY }}
+          APP_PROVISIONING_PROFILE: ${{ secrets.APP_PROVISIONING_PROFILE }}
+          APP_SIGNING_IDENTITY_PASSWORD: ${{ secrets.APP_SIGNING_IDENTITY_PASSWORD }}
+          FINDER_EXTENSION_SIGNING_IDENTITY: ${{ secrets.APP_SIGNING_IDENTITY }}
+          FINDER_EXTENSION_PROVISIONING_PROFILE: ${{ secrets.FINDER_EXTENSION_PROVISIONING_PROFILE }}
+          FINDER_EXTENSION_SIGNING_IDENTITY_PASSWORD: ${{ secrets.APP_SIGNING_IDENTITY_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: ./build_and_sign.sh
+
