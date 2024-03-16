@@ -26,4 +26,4 @@ ARCHIVE_NAME=output
 
 xcodebuild archive -DVTProvisioningProfileSearchPath="$RUNNER_TEMP" -project ShareLink.xcodeproj -scheme ShareLink -destination 'generic/platform=macOS' -archivePath "$ARCHIVE_NAME" CODE_SIGN_IDENTITY=abff0bcfc75d3be67107129cd0760e03fb87fc22 OTHER_CODE_SIGN_FLAGS="--keychain $KEYCHAIN_PATH"
 
-productbuild --sign '3cc9a73e6eb08b26291e64e8d8e5933134184c3e' --component "$ARCHIVE_NAME".xcarchive/Products/Applications/ShareLink.app /Applications ShareLink.pkg
+productbuild --keychain "$KEYCHAIN_PATH" --sign '3cc9a73e6eb08b26291e64e8d8e5933134184c3e' --component "$ARCHIVE_NAME".xcarchive/Products/Applications/ShareLink.app /Applications ShareLink.pkg
