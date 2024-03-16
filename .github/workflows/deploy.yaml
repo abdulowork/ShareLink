@@ -18,6 +18,9 @@ jobs:
           PKG_SIGNING_IDENTITY: ${{ secrets.PKG_SIGNING_IDENTITY }}
           PKG_SIGNING_IDENTITY_PASSWORD: ${{ secrets.PKG_SIGNING_IDENTITY_PASSWORD }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          NOTARIZATION_ISSUER: ${{ secrets.NOTARIZATION_ISSUER }}
+          NOTARIZATION_KEY: ${{ secrets.NOTARIZATION_KEY }}
+          NOTARIZATION_KEY_ID: ${{ secrets.NOTARIZATION_KEY_ID }}
         run: ./build_and_sign.sh
       - name: Deploy to releases
         uses: "marvinpinto/action-automatic-releases@latest"

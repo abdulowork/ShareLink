@@ -8,12 +8,14 @@ PKG_IDENTITY_PATH=$RUNNER_TEMP/pkg_identity.p12
 APP_PROVISIONING_PROFILE_PATH=$RUNNER_TEMP/app.provisionprofile
 FINDER_EXTENSION_PROVISIONING_PROFILE_PATH=$RUNNER_TEMP/finder_extension.provisionprofile
 KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+NOTARIZATION_KEY_PATH=$RUNNER_TEMP/notarization_key
 
 echo -n "$APP_SIGNING_IDENTITY" | base64 --decode -o "$APP_IDENTITY_PATH"
 echo -n "$APP_PROVISIONING_PROFILE" | base64 --decode -o "$APP_PROVISIONING_PROFILE_PATH"
 echo -n "$FINDER_EXTENSION_SIGNING_IDENTITY" | base64 --decode -o "$FINDER_EXTENSION_IDENTITY_PATH"
 echo -n "$FINDER_EXTENSION_PROVISIONING_PROFILE" | base64 --decode -o "$FINDER_EXTENSION_PROVISIONING_PROFILE_PATH"
 echo -n "$PKG_SIGNING_IDENTITY" | base64 --decode -o "$PKG_IDENTITY_PATH"
+echo -n "$NOTARIZATION_KEY" | base64 --decode -o "$NOTARIZATION_KEY_PATH"
 
 security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
@@ -27,6 +29,12 @@ security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$
 
 ARCHIVE_NAME=output
 
+# Archive the .app
 xcodebuild archive -DVTProvisioningProfileSearchPath="$RUNNER_TEMP" -project ShareLink.xcodeproj -scheme ShareLink -destination 'generic/platform=macOS' -archivePath "$ARCHIVE_NAME" CODE_SIGN_IDENTITY=abff0bcfc75d3be67107129cd0760e03fb87fc22 OTHER_CODE_SIGN_FLAGS="--keychain $KEYCHAIN_PATH"
 
+# Create the .pkg
 productbuild --keychain "$KEYCHAIN_PATH" --sign '3cc9a73e6eb08b26291e64e8d8e5933134184c3e' --component "$ARCHIVE_NAME".xcarchive/Products/Applications/ShareLink.app /Applications ShareLink.pkg
+
+# Notarize
+xcrun notarytool submit --issuer "$NOTARIZATION_ISSUER" --key-id "$NOTARIZATION_KEY_ID" --key "$NOTARIZATION_KEY_PATH" --wait ShareLink.pkg
+xcrun stapler staple ShareLink.pkg
