@@ -67,7 +67,7 @@ class FinderSync: FIFinderSync {
     
     private func writeShareLinkToPasteboard(action: ShareLinkAction) {
         setPasteboardFromSelectedItems { items in
-            items.map(\.absoluteURL).map { $0.shareLink(action: action) }.joined(separator: "\n")
+            items.map(\.absoluteURL).map { $0.shareLink(action: action) }
         }
     }
 
@@ -83,21 +83,34 @@ class FinderSync: FIFinderSync {
                     return nil
                 }
                 return "smb:" + pathInfo.mountUrl + urlPath[urlPath.index(urlPath.startIndex, offsetBy: pathInfo.mountPath.count)...]
-            }.joined(separator: "\n")
+            }
         }
     }
     
     private func setPasteboardFromSelectedItems(
-        pasteboardStringFromItems: ([URL]) -> String
+        pasteboardStringFromItems: ([URL]) -> [String]
     ) {
         guard let items = FIFinderSyncController.default().selectedItemURLs() else {
             return
         }
         NSPasteboard.general.clearContents()
+
+        let links = pasteboardStringFromItems(items)
+        
         NSPasteboard.general.setString(
-            pasteboardStringFromItems(items),
+            links.joined(separator: "\n"),
             forType: .string
         )
+        NSPasteboard.general.setData(
+            Data("<html><body>\(joinATags(links: links))</body></html>".utf8),
+            forType: .html
+        )
+    }
+    
+    private func joinATags(links: [String]) -> String {
+        links.map { link in
+            "<a href=\"\(link)\">\(link)</a>"
+        }.joined(separator: "<span style=\"white-space: pre-line\">\n</span>")
     }
 
 }
