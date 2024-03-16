@@ -1,4 +1,4 @@
-name: App build
+name: Build and deploy a release
 on: workflow_dispatch
 
 jobs:
@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Install the Apple certificate and provisioning profile
+      - name: Build and sign
         env:
           APP_SIGNING_IDENTITY: ${{ secrets.APP_SIGNING_IDENTITY }}
           APP_PROVISIONING_PROFILE: ${{ secrets.APP_PROVISIONING_PROFILE }}
@@ -17,4 +17,12 @@ jobs:
           FINDER_EXTENSION_SIGNING_IDENTITY_PASSWORD: ${{ secrets.APP_SIGNING_IDENTITY_PASSWORD }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: ./build_and_sign.sh
-
+      - name: Deploy to releases
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          title: "Deployment"
+          files: |
+            LICENSE
+            *.pkg
