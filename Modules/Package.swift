@@ -3,7 +3,12 @@ import PackageDescription
 
 let package = Package(
     name: "Modules",
+    platforms: [.macOS(.v13)],
     products: [
+        .library(
+            name: "MenuUI",
+            targets: ["MenuUI"]
+        ),
         .library(
             name: "ShareLinkActions",
             targets: ["ShareLinkActions"]
@@ -14,11 +19,8 @@ let package = Package(
         ),
     ],
     targets: [
-        .target(
-            name: "ShareLinkActions"
-        ),
-        .target(
-            name: "SearchForMount"
-        )
+        .target(name: "MenuUI"),
+        .target(name: "ShareLinkActions"),
+        .target(name: "SearchForMount"),
     ]
 )

@@ -16,6 +16,7 @@
 		BCBFEDEA2BA5D8CB0017FA9A /* ShareLinkActions in Frameworks */ = {isa = PBXBuildFile; productRef = BCBFEDE92BA5D8CB0017FA9A /* ShareLinkActions */; };
 		BCBFEDEC2BA5D8D00017FA9A /* SearchForMount in Frameworks */ = {isa = PBXBuildFile; productRef = BCBFEDEB2BA5D8D00017FA9A /* SearchForMount */; };
 		BCBFEDEE2BA5D8D00017FA9A /* ShareLinkActions in Frameworks */ = {isa = PBXBuildFile; productRef = BCBFEDED2BA5D8D00017FA9A /* ShareLinkActions */; };
+		BCBFEDF02BA638CF0017FA9A /* MenuUI in Frameworks */ = {isa = PBXBuildFile; productRef = BCBFEDEF2BA638CF0017FA9A /* MenuUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BCBFEDEA2BA5D8CB0017FA9A /* ShareLinkActions in Frameworks */,
+				BCBFEDF02BA638CF0017FA9A /* MenuUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,6 +171,7 @@
 			name = ShareLink;
 			packageProductDependencies = (
 				BCBFEDE92BA5D8CB0017FA9A /* ShareLinkActions */,
+				BCBFEDEF2BA638CF0017FA9A /* MenuUI */,
 			);
 			productName = ShareLink;
 			productReference = BC3732B02B9C67ED0002C0A6 /* ShareLink.app */;
@@ -582,6 +585,10 @@
 		BCBFEDED2BA5D8D00017FA9A /* ShareLinkActions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ShareLinkActions;
+		};
+		BCBFEDEF2BA638CF0017FA9A /* MenuUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MenuUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
