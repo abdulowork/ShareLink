@@ -11,6 +11,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let state = LogsState()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        setUpMenuUI()
+    }
+    
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        NSAppleEventManager
+            .shared()
+            .setEventHandler(
+                self,
+                andSelector: #selector(handleURL(event:reply:)),
+                forEventClass: AEEventClass(kInternetEventClass),
+                andEventID: AEEventID(kAEGetURL)
+            )
+    }
+
+
+    func applicationWillTerminate(_ aNotification: Notification) {}
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool { return true }
+    
+    private func setUpMenuUI() {
         let contentViewSwiftUI = LogsView(logsState: state)
         let contentView = NSHostingView(rootView: contentViewSwiftUI)
         contentView.frame = NSRect(x: 0, y: 0, width: 400, height: 400)
@@ -29,24 +48,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.button?.addSubview(iconView)
         statusItem.button?.frame = iconView.frame
         self.statusItem = statusItem
-    }
-    
-    func applicationWillFinishLaunching(_ notification: Notification) {
-        NSAppleEventManager
-            .shared()
-            .setEventHandler(
-                self,
-                andSelector: #selector(handleURL(event:reply:)),
-                forEventClass: AEEventClass(kInternetEventClass),
-                andEventID: AEEventID(kAEGetURL)
-            )
-    }
-
-
-    func applicationWillTerminate(_ aNotification: Notification) {}
-
-    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
-        return true
     }
 
     @objc func handleURL(event: NSAppleEventDescriptor, reply: NSAppleEventDescriptor) {
